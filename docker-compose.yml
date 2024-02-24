@@ -1,0 +1,20 @@
+version: "3.9"
+
+services:
+  store:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: store_container_v2
+    ports:
+      - "8009:8009"
+    volumes:
+      #- ./store:/store
+      - ./store:/app/store
+    env_file:
+      - .env
+    command: bash -c "store/manage.py runserver 0.0.0.0:8009"
+
+volumes:
+  static_volume:
+  media_volume:
