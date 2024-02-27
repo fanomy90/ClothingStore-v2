@@ -2,10 +2,10 @@ from django.shortcuts import get_list_or_404, render
 from goods.models import Categories, Products
 from django.core.paginator import Paginator
 
-def catalog(request, category_slug, page=1):
+def catalog(request, category_slug):
+    page = request.GET.get('page', 1)
     if category_slug == 'all':
     #ojects это метод для работы с записями в БД
-    #categories = Categories.objects.all()
     #Использование фильтра при выводе товара по категориям
         goods = Products.objects.all()
     else:
@@ -13,7 +13,7 @@ def catalog(request, category_slug, page=1):
         #goods = Products.objects.filter(category__slug=category_slug)
     #пагинатор
     paginator = Paginator(goods, 9)
-    current_page = paginator.page(page)
+    current_page = paginator.page(int(page))
 
     context: dict[str, str] = {
         "title": "Home - Каталог ",
