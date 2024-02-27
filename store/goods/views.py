@@ -1,13 +1,24 @@
-from django.shortcuts import render
+from django.shortcuts import get_list_or_404, render 
 from goods.models import Categories, Products
+from django.core.paginator import Paginator
 
-def catalog(request):
+def catalog(request, category_slug, page=1):
+    if category_slug == 'all':
     #ojects это метод для работы с записями в БД
     #categories = Categories.objects.all()
-    goods = Products.objects.all()
+    #Использование фильтра при выводе товара по категориям
+        goods = Products.objects.all()
+    else:
+        goods = get_list_or_404(Products.objects.filter(category__slug=category_slug))
+        #goods = Products.objects.filter(category__slug=category_slug)
+    #пагинатор
+    paginator = Paginator(goods, 9)
+    current_page = paginator.page(page)
+
     context: dict[str, str] = {
         "title": "Home - Каталог ",
-        "goods": goods,
+        "goods": current_page,
+        "slug_url": category_slug,
         #'categories': categories,
     }
     return render(request, "goods/catalog.html", context)

@@ -25,6 +25,8 @@ class Products(models.Model):
         db_table = 'product'
         verbose_name = 'Продукт'
         verbose_name_plural = 'Продукты'
+        #сортировка для работы пагинации
+        ordering = ("id",)
     #Кастомный возврат имени категории и количества вместо PK в админке
     def __str__(self):
         return f'{self.name} Количество - {self.quantity}'
