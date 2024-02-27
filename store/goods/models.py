@@ -28,3 +28,11 @@ class Products(models.Model):
     #Кастомный возврат имени категории и количества вместо PK в админке
     def __str__(self):
         return f'{self.name} Количество - {self.quantity}'
+    #унификация отображение id товара на странице
+    def display_id(self):
+        return f"{self.id:05}"
+    #Обработка скидки
+    def sell_price(self):
+        if self.discount:
+            return round(self.price - self.price*self.discount/100, 2)
+        return self.price

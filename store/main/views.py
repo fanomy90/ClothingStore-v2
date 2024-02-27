@@ -4,13 +4,9 @@ from goods.models import Categories
 
 # Create your views here.
 def index(request):
-
-    categories = Categories.objects.all()
-
     context: dict = {
         'title': 'Главная',
         'content': 'Магазин одежды',
-        'categories': categories,
     }
     return render(request, 'main/index.html', context)
 
