@@ -1,17 +1,23 @@
 from django.shortcuts import get_list_or_404, render 
 from goods.models import Categories, Products
 from django.core.paginator import Paginator
+from goods.utils import q_search
 
-def catalog(request, category_slug):
+def catalog(request, category_slug=None):
     #берем параметры страницы из запроса пользователя, значение по умолчанию 1 страница
     page = request.GET.get('page', 1)
     #параметры фильтров из get запроса который прописан в шаблоне
     on_sale = request.GET.get('on_sale', None)
     order_by = request.GET.get('order_by', None)
+    #сохранение в переменную параметров поиска
+    query = request.GET.get('q', None)
     #делаем вывод товаров по категориям
     if category_slug == 'all':
     #ojects это метод для работы с записями в БД
         goods = Products.objects.all()
+    #вызов обработки поиска из файла utils.py с передачей параметров поиска
+    elif query:
+        goods = q_search(query)
     else:
         #Использование фильтра при выводе товара по категориям
         goods = get_list_or_404(Products.objects.filter(category__slug=category_slug))
