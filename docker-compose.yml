@@ -1,11 +1,21 @@
 version: "3.9"
 
 services:
+  yt_postgres:
+    image: postgres:15
+    container_name: yt_postgres
+    volumes:
+      - ./store/postgres:/var/lib/postgresql/data
+    env_file:
+      - .env
+
   store:
     build:
       context: .
       dockerfile: Dockerfile
     container_name: store_container_v2
+    depends_on:
+      - yt_postgres
     ports:
       - "8009:8009"
     volumes:
@@ -13,7 +23,9 @@ services:
       - ./store:/app/store
     env_file:
       - .env
-    command: bash -c "store/manage.py runserver 0.0.0.0:8009"
+    #command: bash -c "store/manage.py runserver 0.0.0.0:8009"
+    command: bash -c "./store/manage.py makemigrations && ./store/manage.py migrate && ./store/manage.py runserver 0.0.0.0:8009"
+    
 
 volumes:
   static_volume:
