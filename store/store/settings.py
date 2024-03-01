@@ -28,6 +28,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    #приложение для полнотекстового поиска в postgres
+    'django.contrib.postgres',
     #для отладки запросов к БД
     "debug_toolbar",
     'main',
