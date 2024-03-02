@@ -48,10 +48,10 @@
 
         {% if request.GET.q %}
         <h3 class="mt-4">Результат поиска по запросу {{ request.GET.q }}</h3>
-        {% if not goods %}
-            <link rel="stylesheet" href="{% static "deps/css/my_footer_css.css" %}">
-            <h2 class="mt-4">По запросу ничего не найдено</h2>
-        {% endif %}
+            {% if not goods %}
+                <link rel="stylesheet" href="{% static "deps/css/my_footer_css.css" %}">
+                <h2 class="mt-4">По запросу ничего не найдено</h2>
+            {% endif %}
         {% endif %}
         {% for product in goods %}
             <!-- Карта товара -->
@@ -70,7 +70,7 @@
                         </a>
                         <p class="card-text">
                             {% autoescape off %}
-                                {% if product.headline %}{{ product.bodyline|truncatechars:75 }}{% else %}{{ product.description|truncatechars:75 }}{% endif %}
+                                {% if product.bodyline %}{{ product.bodyline|truncatechars:100 }}{% else %}{{ product.description|truncatechars:35 }}{% endif %}
                             {% endautoescape %}
                         </p>
                         <p class="product_id">id: {{ product.display_id }}</p>
