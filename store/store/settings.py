@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     "debug_toolbar",
     'main',
     'goods',
+    'users',
 ]
 
 MIDDLEWARE = [
@@ -53,7 +54,8 @@ ROOT_URLCONF = 'store.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        #дополнительная папка для общих шаблонов
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
