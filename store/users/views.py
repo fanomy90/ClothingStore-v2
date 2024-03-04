@@ -1,6 +1,7 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from users.forms import UserLoginForm, UserRegistrationForm
-from django.contrib import auth
+from users.forms import UserLoginForm, UserRegistrationForm, ProfileForm
+from django.contrib import auth, messages
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 
@@ -13,6 +14,8 @@ def login(request):
             user = auth.authenticate(username=username, password=password)
             if user:
                 auth.login(request, user)
+                #уведомление пользователя о входе
+                messages.success(request, f"{username}, успешно вошел на сайт")
                 return HttpResponseRedirect(reverse('main:index'))
     else:
         form = UserLoginForm()
@@ -32,6 +35,7 @@ def registration(request):
             user = form.instance
             #делаем автовход по сохраненным из формы регистрации данным
             auth.login(request, user)
+            messages.success(request, f"{user.username}, успешно зарегистрировался и вошел на сайт")
             return HttpResponseRedirect(reverse('main:index'))
     else:
         form = UserRegistrationForm()
@@ -41,11 +45,28 @@ def registration(request):
     }
     return render(request, 'users/registration.html', context)
 
+#ограничение доступа для неавторизованных пользователей
+@login_required
 def profile(request):
+    if request.method == 'POST':
+        form = ProfileForm(data=request.POST, instance=request.user, files=request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Пользователь упешно обновлен")
+            return HttpResponseRedirect(reverse('user:profile'))
+    else:
+        #отображение информации пользователя
+        form = ProfileForm(instance=request.user)
+    
     context = {
-        'title': 'Home - Кабинет'
+        'title': 'Home - Кабинет',
+        'form': form
     }
     return render(request, 'users/profile.html', context)
+
+#ограничение доступа для неавторизованных пользователей
+@login_required
 def logout(request):
+    messages.success(request, f"{request.user.username}, упешно вышел")
     auth.logout(request)
     return redirect(reverse('main:index'))
