@@ -9,6 +9,10 @@
                     <h2 class="text-center mb-4">Авторизация</h2>
                     <form action="{% url 'user:login' %}" method="post">
                         {% csrf_token %}
+                        {% comment %} Редирект для неавторизованного пользователя когда сработал декоратор {% endcomment %}
+                        {% if request.GET.next %}
+                            <input type="hidden" name="next" value={{ request.GET.next }}>
+                        {% endif %}
                         {% comment %} реализация формы входа на сайт с минимальным обращением к бэкенду {% endcomment %}
                         <div class="mb-3">
                             <label for="id_username" class="form-label">Имя пользователя</label>

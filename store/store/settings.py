@@ -136,6 +136,8 @@ MEDIA_ROOT = BASE_DIR / 'media'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #переопределим используемую для пользователей модель
 AUTH_USER_MODEL = 'users.User'
+#настройка для работы декоратора @login_required
+LOGIN_URL = '/user/login/'
 
 INTERNAL_IPS = [
     "127.0.0.1",

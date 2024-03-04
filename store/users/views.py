@@ -16,6 +16,9 @@ def login(request):
                 auth.login(request, user)
                 #уведомление пользователя о входе
                 messages.success(request, f"{username}, успешно вошел на сайт")
+                #редирект для неавторизованного пользователя
+                if request.POST.get('next', None):
+                    return HttpResponseRedirect(request.POST.get('next'))
                 return HttpResponseRedirect(reverse('main:index'))
     else:
         form = UserLoginForm()
@@ -53,7 +56,7 @@ def profile(request):
         if form.is_valid():
             form.save()
             messages.success(request, "Пользователь упешно обновлен")
-            return HttpResponseRedirect(reverse('user:profile'))
+            return HttpResponseRedirect(reverse('main:profile'))
     else:
         #отображение информации пользователя
         form = ProfileForm(instance=request.user)
