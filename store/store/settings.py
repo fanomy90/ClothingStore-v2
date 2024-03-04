@@ -134,6 +134,8 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+#переопределим используемую для пользователей модель
+AUTH_USER_MODEL = 'users.User'
 
 INTERNAL_IPS = [
     "127.0.0.1",
