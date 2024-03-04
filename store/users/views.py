@@ -1,5 +1,5 @@
-from django.shortcuts import render
-from users.forms import UserLoginForm
+from django.shortcuts import render, redirect
+from users.forms import UserLoginForm, UserRegistrationForm
 from django.contrib import auth
 from django.urls import reverse
 from django.http import HttpResponseRedirect
@@ -24,15 +24,28 @@ def login(request):
     return render(request, 'users/login.html', context)
 
 def registration(request):
+    if request.method == 'POST':
+        form = UserRegistrationForm(data=request.POST)
+        if form.is_valid():
+            form.save()
+            #записываем в переменную введенные при регистрации данные
+            user = form.instance
+            #делаем автовход по сохраненным из формы регистрации данным
+            auth.login(request, user)
+            return HttpResponseRedirect(reverse('main:index'))
+    else:
+        form = UserRegistrationForm()
     context = {
-        'title': 'Home - Регистрация'
+        'title': 'Home - Регистрация',
+        'form': form
     }
     return render(request, 'users/registration.html', context)
+
 def profile(request):
     context = {
         'title': 'Home - Кабинет'
     }
     return render(request, 'users/profile.html', context)
 def logout(request):
-
-    return render(request, '', context)
+    auth.logout(request)
+    return redirect(reverse('main:index'))
