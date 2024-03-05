@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
+    #для сообщений
     'django.contrib.messages',
     'django.contrib.staticfiles',
     #приложение для полнотекстового поиска в postgres
@@ -35,6 +36,7 @@ INSTALLED_APPS = [
     'main',
     'goods',
     'users',
+    'carts',
 ]
 
 MIDDLEWARE = [
@@ -43,6 +45,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    #для сообщений
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     #для отладки запросов к БД
