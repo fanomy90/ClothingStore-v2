@@ -14,9 +14,11 @@
                             <div class="row">
                                 <div class="col-md-12 mb-3 text-center">
                                     {% if user.image %}
-                                        <img src="{{ use.image.url }}"
-                                            alt="Аватар пользователя" class="img-fluid rounded-circle"
-                                            style="max-width: 150px;">
+                                        <img src="{{ user.image.url }}"
+                                            alt="Аватар пользователя" 
+                                            {% comment %} class="img-fluid rounded-circle" {% endcomment %}
+                                            class="card-img-top"
+                                            style="max-width: 250px;">
                                     {% else %}
                                         <img src="{% static 'deps/images/baseavatar.jpg' %}"
                                             alt="Аватар пользователя" class="img-fluid rounded-circle"

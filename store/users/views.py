@@ -56,7 +56,7 @@ def profile(request):
         if form.is_valid():
             form.save()
             messages.success(request, "Пользователь упешно обновлен")
-            return HttpResponseRedirect(reverse('main:profile'))
+            return HttpResponseRedirect(reverse('users:profile'))
     else:
         #отображение информации пользователя
         form = ProfileForm(instance=request.user)
