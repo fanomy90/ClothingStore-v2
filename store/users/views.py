@@ -67,6 +67,9 @@ def profile(request):
     }
     return render(request, 'users/profile.html', context)
 
+def users_cart(request):
+    return render(request, "users/users_cart.html")
+
 #ограничение доступа для неавторизованных пользователей
 @login_required
 def logout(request):
