@@ -1,7 +1,11 @@
 {% extends 'base.html' %}
 {% load static %}
+{% comment %} подключаем шаблонный тег из приложения carts для передачи карзин пользователя {% endcomment %}
+{% load carts_tags %}
 
 {% block content %}
+{% comment %} подключаем шаблонный тег из приложения carts для передачи карзин пользователя {% endcomment %}
+{% user_carts request as carts %}
     <div class="row">
         <div class="container mt-5">
             <div class="row justify-content-center">
