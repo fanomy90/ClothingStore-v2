@@ -23,6 +23,7 @@ def cart_add(request):
         else:
             Cart.objects.create(user=request.user, product=product, quantity=1)
     #работа с jquery для перерисовки корзины без обновления страницы
+    #получаем все корзины пользователя с помошью метода из файла utils.py
     user_cart = get_user_carts(request)
     cart_items_html = render_to_string(
         #формируем часть разметки шаблона в виде строки и контекст в виде словаря для перерисовки с помощью jquery
@@ -34,17 +35,42 @@ def cart_add(request):
     }
     return JsonResponse(response_data)
 
-def cart_change(request, cart):
-    ...
+def cart_change(request):
+    #получаем данные из post запроса
+    cart_id = request.POST.get("cart_id")
+    #получаем с фронтенда количество товара которое должно быть в корзине
+    quantity = request.POST.get("quantity")
+    #получаем экзепляр объекта корзины из модели по id
+    cart = Cart.objects.get(id=cart_id)
+    #Формируем данные для контекста - записываем количество товара в корзине
+    cart.quantity = quantity
+    cart.save()
+    update_quantity = cart.quantity
+    #работа с jquery для перерисовки корзины без обновления страницы
+    #получаем все корзины пользователя с помошью метода из файла utils.py
+    cart = get_user_carts(request)
+    cart_items_html = render_to_string(
+        #формируем часть разметки шаблона в виде строки и контекст в виде словаря для перерисовки с помощью jquery
+        "carts/includes/included_cart.html", {"carts": cart}, request=request
+    )
+    #собираем контекст для передачи в jquery
+    response_data = {
+        "message": "Количество товара изменено",
+        "cart_items_html": cart_items_html,
+        "quantity": update_quantity,
+    }
+    return JsonResponse(response_data)
+    
 def cart_remove(request):
     #получаем данные из post запроса
     cart_id = request.POST.get("cart_id")
     #собираем данные для контекста
-    #получаем экзепляр объекта корзины из модели по id
+    #получаем экзепляр объекта корзины из модели по idcart_change
     cart = Cart.objects.get(id=cart_id)
     quantity = cart.quantity
     cart.delete()
     #работа с jquery для перерисовки корзины без обновления страницы
+    #получаем все корзины пользователя с помошью метода из файла utils.py
     user_cart = get_user_carts(request)
     cart_items_html = render_to_string(
         #формируем часть разметки шаблона в виде строки и контекст в виде словаря для перерисовки с помощью jquery
