@@ -22,6 +22,17 @@ def cart_add(request):
             #если корзина по доавбляемому товару не найдена то создаем ее
         else:
             Cart.objects.create(user=request.user, product=product, quantity=1)
+    #добавление товара в корзину для неавторизованного пользователя
+    else:
+        carts = Cart.objects.filter(
+            session_key=request.session.session_key, product=product)
+        if carts.exists():
+            cart = carts.first()
+            if cart:
+                cart.quantity += 1
+                cart.save()
+        else:
+            Cart.objects.create(session_key=request.session.session_key, product=product, quantity=1)
     #работа с jquery для перерисовки корзины без обновления страницы
     #получаем все корзины пользователя с помошью метода из файла utils.py
     user_cart = get_user_carts(request)
