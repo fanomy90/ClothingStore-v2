@@ -36,12 +36,15 @@ def cart_add(request):
     #работа с jquery для перерисовки корзины без обновления страницы
     #получаем все корзины пользователя с помошью метода из файла utils.py
     user_cart = get_user_carts(request)
+    #преобразуем в строку разметку корзины пользователя с передачей в разметку контекста user_cart и request
     cart_items_html = render_to_string(
         #формируем часть разметки шаблона в виде строки и контекст в виде словаря для перерисовки с помощью jquery
-        "carts/includes/included_cart.html", {"carts": user_cart}, request=request
-    )
+        "carts/includes/included_cart.html", {"carts": user_cart}, request=request)
+    #формируем контекст для передачи в виде json словаря
     response_data = {
+        #передаем текст оповещения
         "message": "Товар добавлен в корзину",
+        #передаем разметку содержимого корзины для переотрисовки с помощью jquery
         "cart_items_html": cart_items_html,
     }
     return JsonResponse(response_data)

@@ -10,6 +10,7 @@ urlpatterns = [
     #path("__debug__/", include("debug_toolbar.urls")),
     path("user/", include("users.urls", namespace="user")),
     path("cart/", include("carts.urls", namespace="cart")),
+    path("orders/", include("orders.urls", namespace="orders")),
 ]
 #для отладки запросов к БД
 if settings.DEBUG:
