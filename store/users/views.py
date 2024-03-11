@@ -5,6 +5,8 @@ from django.contrib import auth, messages
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 from carts.models import Cart
+from orders.models import Order, OrderItem
+from django.db.models import Prefetch
 
 def login(request):
     if request.method == 'POST':
@@ -79,9 +81,23 @@ def profile(request):
         #отображение информации пользователя
         form = ProfileForm(instance=request.user)
     
+    #отображение заказов в профиле
+    orders = (
+        #фильтруем заказы по пользователю
+        Order.objects.filter(user=request.user).prefetch_related(
+            #класс prefetch - указываем имя дополнительного queryset и формируем его из всех заказов по пользователю и через select_releted всеми товарами привязанными к этим заказам
+            Prefetch(
+                "orderitem_set",
+                queryset=OrderItem.objects.select_related("product"),
+            )
+        )
+        #сортируем полученные элементы по -id - вверху будет последний заказ
+        .order_by("-id")
+    )
     context = {
         'title': 'Home - Кабинет',
-        'form': form
+        'form': form,
+        'orders': orders,
     }
     return render(request, 'users/profile.html', context)
 

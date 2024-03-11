@@ -5,7 +5,10 @@ from carts.models import Cart
 from django.forms import ValidationError
 from orders.models import Order, OrderItem
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
+#декартор который позволяет создать заказ только вошедшим на сайт пользователям, неавторизованного пользователя перебросит на страницу авторизации
+@login_required
 def create_order(request):
     if request.method == 'POST':
         form = CreateOrderForm(data=request.POST)
@@ -60,6 +63,7 @@ def create_order(request):
     context = {
         'title': 'Home - Оформление заказа',
         'form': form,
+        'order': True,
     }
     return render(request, 'orders/create_order.html', context=context)
 
