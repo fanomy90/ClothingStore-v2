@@ -29,7 +29,7 @@ def login(request):
                     Cart.objects.filter(session_key=session_key).update(user=user)
 
                 #редирект для неавторизованного пользователя
-                redirect_page = request.POST.get('netxt', None)
+                redirect_page = request.POST.get('next', None)
                 if redirect_page and redirect_page != reverse('user:logout'):
                     return HttpResponseRedirect(request.POST.get('next'))
                 return HttpResponseRedirect(reverse('main:index'))
